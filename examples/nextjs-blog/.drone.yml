@@ -1,0 +1,20 @@
+kind: pipeline
+type: docker
+name: default
+platform:
+  os: linux
+  arch: amd64
+workspace:
+  path: /drone/my-site
+steps:
+- name: deploy
+  image: docker.io/kameshsampath/drone-vercel-plugin
+  pull: never
+  settings:
+    vercel_token:
+      from_secret: vercel_token
+    vercel_org_id:
+      from_secret: vercel_org_id
+    vercel_project_id:
+      from_secret: vercel_project_id
+    vercel_project_create: true

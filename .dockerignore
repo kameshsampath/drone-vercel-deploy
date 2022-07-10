@@ -1,0 +1,9 @@
+scripts
+examples
+docker
+.env*
+.gitignore
+.envrc
+.vercel
+node_modules
+.next
