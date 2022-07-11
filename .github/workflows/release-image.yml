@@ -3,7 +3,7 @@ name: Release Image
 on:
   release:
     types:
-      - "released"
+      - released
   workflow_dispatch:
 env:
   PLUGIN_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/drone-vercel-deploy
@@ -27,7 +27,7 @@ jobs:
         env:
           TAG_NAME: ${{ github.event.release.tag_name }}
           PLUGIN_IMAGE_NAME: ${{ env.PLUGIN_IMAGE_NAME }}
-        id: build and release plugin image
+        id: build-plugin-image
         run: |
           docker build \
           --build-arg BUILDKIT_MULTI_PLATFORM=1 \
