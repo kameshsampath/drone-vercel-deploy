@@ -3,15 +3,25 @@
 set -e
 set -o pipefail
 
-VERCEL_COMMAND=("vercel" "--prod" "--prebuilt")
-
 if [ -z "${PLUGIN_VERCEL_TOKEN}" ];
 then
 	echo "Please set Vercel Token to use (Settings Name: vercel_token)"
 	exit 1
 fi
 
-VERCEL_COMMAND+=("-t" "${PLUGIN_VERCEL_TOKEN}")
+VERCEL_ENV="${PLUGIN_VERCEL_ENV}"
+
+if [ "${PLUGIN_LOG_LEVEL}" == "debug" ];
+then
+  printf "\n Vercel Environment %s \n" "${VERCEL_ENV}"
+fi
+
+VERCEL_COMMAND+=("vercel" "deploy" "--prebuilt" "-t" "${PLUGIN_VERCEL_TOKEN}")
+
+if [ "${VERCEL_ENV}" == "production" ];
+then
+  VERCEL_COMMAND+=("--prod")
+fi
 
 if [[ -z "${PLUGIN_VERCEL_ORG_ID}" ]];
 then
@@ -42,21 +52,50 @@ then
   printf "Found .vercel config loading project from it"
   VERCEL_ORG_ID=$(jq -r '.orgId' "${DRONE_WORKSPACE}/.vercel/project.json")
   VERCEL_PROJECT_ID=$(jq -r '.projectId' "${DRONE_WORKSPACE}/.vercel/project.json")
+fi
+
+VERCEL_COMMAND+=("-c")
+
+export VERCEL_ORG_ID
+export VERCEL_PROJECT_ID
+export VERCEL_ENV
+
+if [ "${PLUGIN_LOG_LEVEL}" == "debug" ];
+then
+  printf " \n Vercel Runtime Env %s  \n" "${PLUGIN_VERCEL_ENVIRONMENT}"
+fi
+
+OLDIFS=$IFS
+if [ -n "${PLUGIN_VERCEL_ENVIRONMENT}" ] ;
+then
+   IFS=, read -ra envarray <<< "${PLUGIN_VERCEL_ENVIRONMENT}"
+   for i in "${!envarray[@]}";
+   do
+      IFS='=' read -ra kv <<< "${envarray[i]//[$'\t\r\n']}"
+      # Remove it to ensure we add it afresh, handle Error if key not found
+      vercel env rm -y -t "${PLUGIN_VERCEL_TOKEN}" "${kv[0]}" "${VERCEL_ENV}" || true &>/dev/null
+      echo -n "${kv[1]}" | vercel env add -t "${PLUGIN_VERCEL_TOKEN}" "${kv[0]}" "${VERCEL_ENV}" 
+   done
+fi
+IFS=$OLDIFS
+
+printf "\nBuilding Vercel Project for environment %s \n" "${VERCEL_ENV}"
+
+vercel pull -t "${PLUGIN_VERCEL_TOKEN}" --environment="${VERCEL_ENV}"
+if [ "${VERCEL_ENV}" == "production" ];
+then
+  vercel build --prod
 else
-  VERCEL_COMMAND+=("-c")
+  vercel build
 fi
 
-if [ -n "${VERCEL_ORG_ID}" ] && [ -n "${VERCEL_ORG_ID}" ];
-then 
-  export VERCEL_ORG_ID
-  export VERCEL_PROJECT_ID
-fi
-
-printf "\nBuilding Vercel Project\n"
-vercel pull -t "${PLUGIN_VERCEL_TOKEN}"
-vercel build --prod
 printf "\n"
 
 CLEAN_COMMANDS=("rm" "-rf" ".vercel" ".next")
+
+if [ "${PLUGIN_LOG_LEVEL}" == "debug" ];
+then
+  printf " \n Vercel COMMAND %s  \n" "${VERCEL_COMMAND[*]}"
+fi
 
 exec bash -c "${VERCEL_COMMAND[*]} && ${CLEAN_COMMANDS[*]}"

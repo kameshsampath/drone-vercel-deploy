@@ -1,6 +1,8 @@
 import Head from 'next/head'
 
 export default function Home() {
+  console.log(`FOO ? ${process.env.NEXT_PUBLIC_FOO}`);
+  console.log(`Xmas ? ${process.env.NEXT_PUBLIC_XMAS}`);
   return (
     <div className="container">
       <Head>
@@ -44,6 +46,24 @@ export default function Home() {
             <p>
               Instantly deploy your Next.js site to a public URL with Vercel.
             </p>
+          </a>
+          <a href="https://vercel.com/support/articles/how-to-add-vercel-environment-variables" className="card">
+            <h3>Environment Variables &rarr;</h3>
+            <p><i>NEXT_PUBLIC_</i> prefixed environment variables set in this app</p>
+            <table>
+              <tr>
+                <td>Key</td>
+                <td>Value</td>
+              </tr>
+              <tr>
+                <td>NEXT_PUBLIC_FOO</td>
+                <td>{process.env.NEXT_PUBLIC_FOO}</td>
+              </tr>
+              <tr>
+                <td>NEXT_PUBLIC_XMAS</td>
+                <td>{process.env.NEXT_PUBLIC_XMAS}</td>
+              </tr>
+            </table>
           </a>
         </div>
       </main>

@@ -31,4 +31,5 @@ yarn-error.log*
 
 .envrc
 .vercel
-!.env.example
+secret*
+!secret.example

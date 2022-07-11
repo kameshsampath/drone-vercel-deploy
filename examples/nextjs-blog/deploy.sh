@@ -26,4 +26,4 @@ basedir() {
   echo ${full_dir}
 }
 
-drone exec --secret-file="$(basedir)/.env.local" .drone.yml
+drone exec --secret-file="$(basedir)/secret.local" .drone.yml
