@@ -29,6 +29,11 @@ jobs:
           PLUGIN_IMAGE_NAME: ${{ env.PLUGIN_IMAGE_NAME }}
         id: build-plugin-image
         run: |
+          echo "Building Plugin Image Tag $TAG_NAME"
+          if [[ -z $TAG_NAME || "$TAG_NAME" == "undefined" ]];
+          then
+            TAG_NAME="latest"
+          fi
           docker build \
           --build-arg BUILDKIT_MULTI_PLATFORM=1 \
           --platform=linux/amd64 \
