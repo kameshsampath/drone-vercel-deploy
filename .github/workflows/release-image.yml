@@ -4,6 +4,7 @@ on:
   release:
     types:
       - "released"
+  workflow_dispatch:
 env:
   PLUGIN_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/drone-vercel-deploy
 jobs:
