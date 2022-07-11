@@ -1,5 +1,5 @@
 FROM node:lts-alpine
-LABEL org.opencontainers.image.source https://github.com/kameshsampath/drone-vercel-plugin
+LABEL org.opencontainers.image.source https://github.com/kameshsampath/drone-vercel-deploy
 LABEL org.opencontainers.image.authors="Kamesh Sampath<kamesh.sampath@hotmail.com>"
 
 LABEL description="A Drone plugin deploy applications to vercel"

@@ -1,5 +1,5 @@
 CURRENT_DIR = $(shell pwd)
-PLUGIN_IMAGE_NAME := docker.io/kameshsampath/drone-vercel-plugin
+PLUGIN_IMAGE_NAME := docker.io/kameshsampath/drone-vercel-deploy
 DRONE_FILE = .drone.yml
 
 build-and-load:	## Builds and loads the image into local docker context

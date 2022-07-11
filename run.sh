@@ -9,7 +9,7 @@ then
 	exit 1
 fi
 
-VERCEL_ENV="${PLUGIN_VERCEL_ENV}"
+VERCEL_ENV="${PLUGIN_VERCEL_ENVIRONMENT}"
 
 if [ "${PLUGIN_LOG_LEVEL}" == "debug" ];
 then
@@ -62,13 +62,13 @@ export VERCEL_ENV
 
 if [ "${PLUGIN_LOG_LEVEL}" == "debug" ];
 then
-  printf " \n Vercel Runtime Env %s  \n" "${PLUGIN_VERCEL_ENVIRONMENT}"
+  printf " \n Vercel Runtime Env %s  \n" "${PLUGIN_VERCEL_ENVIRONMENT_VARIABLES}"
 fi
 
 OLDIFS=$IFS
-if [ -n "${PLUGIN_VERCEL_ENVIRONMENT}" ] ;
+if [ -n "${PLUGIN_VERCEL_ENVIRONMENT_VARIABLES}" ] ;
 then
-   IFS=, read -ra envarray <<< "${PLUGIN_VERCEL_ENVIRONMENT}"
+   IFS=, read -ra envarray <<< "${PLUGIN_VERCEL_ENVIRONMENT_VARIABLES}"
    for i in "${!envarray[@]}";
    do
       IFS='=' read -ra kv <<< "${envarray[i]//[$'\t\r\n']}"
