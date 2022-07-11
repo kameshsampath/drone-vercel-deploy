@@ -55,8 +55,14 @@ steps:
 
 Run the following command to build and push the image manually
 
-```text
+```shell
 make build-and-load
+```
+
+To build and push the image use,
+
+```shell
+make build-and-push
 ```
 
 ## Testing
