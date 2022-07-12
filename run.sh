@@ -16,6 +16,15 @@ then
   printf "\n Vercel Environment %s \n" "${VERCEL_ENV}"
 fi
 
+if [ -z "${PLUGIN_VERCEL_SITE_DIR}" ];
+then
+  PLUGIN_VERCEL_SITE_DIR=.
+fi
+
+printf "\nUsing directory '%s' as site directory\n" "${PLUGIN_VERCEL_SITE_DIR}"
+
+cd "${PLUGIN_VERCEL_SITE_DIR}"
+
 VERCEL_COMMAND+=("vercel" "deploy" "--prebuilt" "-t" "${PLUGIN_VERCEL_TOKEN}")
 
 if [ "${VERCEL_ENV}" == "production" ];
@@ -63,6 +72,19 @@ export VERCEL_ENV
 if [ "${PLUGIN_LOG_LEVEL}" == "debug" ];
 then
   printf " \n Vercel Runtime Env %s  \n" "${PLUGIN_VERCEL_ENVIRONMENT_VARIABLES}"
+fi
+
+if [ -f "${PLUGIN_VERCEL_ENVIRONMENT_VARIABLE_FILE}" ];
+then
+  printf " \n Loading Environment variable files from  %s  \n" "${PLUGIN_VERCEL_ENVIRONMENT_VARIABLE_FILE}"
+  while IFS= read -r l; do
+      if [ -n "$PLUGIN_VERCEL_ENVIRONMENT_VARIABLES" ];
+      then
+        PLUGIN_VERCEL_ENVIRONMENT_VARIABLES="$PLUGIN_VERCEL_ENVIRONMENT_VARIABLES,$l"
+      else 
+        PLUGIN_VERCEL_ENVIRONMENT_VARIABLES="$l"
+      fi
+  done < "${PLUGIN_VERCEL_ENVIRONMENT_VARIABLE_FILE}"
 fi
 
 OLDIFS=$IFS
