@@ -8,11 +8,9 @@ RUN apk -Uuv add bash curl ca-certificates jq
 
 RUN npm i --location=global vercel
 
-RUN adduser --system --uid 1001 -G root dev 
-
 ADD run.sh /bin/
 RUN chmod +x /bin/run.sh
 
-USER dev
+USER node
 
 CMD ["/bin/run.sh"]
