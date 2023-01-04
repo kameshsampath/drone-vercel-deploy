@@ -63,7 +63,7 @@ then
   VERCEL_PROJECT_ID=$(jq -r '.projectId' "${DRONE_WORKSPACE}/.vercel/project.json")
 fi
 
-VERCEL_COMMAND+=("-c")
+VERCEL_COMMAND+=("--yes")
 
 export VERCEL_ORG_ID
 export VERCEL_PROJECT_ID
