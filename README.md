@@ -39,7 +39,7 @@ steps:
   settings:
     log_level: debug
     # valid values are production, development, preview
-    vercel_env: production
+    vercel_environment: production
     vercel_token:
       from_secret: vercel_token
     vercel_org_id:
@@ -47,7 +47,7 @@ steps:
     vercel_project_id:
       from_secret: vercel_project_id
     vercel_project_create: true
-    vercel_environment:
+    vercel_environment_variables:
     - NEXT_PUBLIC_FOO=BAR
     - NEXT_PUBLIC_XMAS=25 Dec
 ```
